@@ -1,0 +1,25 @@
+services:
+  redis:
+    container_name: rate-limiter-redis
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - /path/to/local/dаta:/root/redis
+      - /path/to/local/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+
+  rate-limiter-goexpert:
+    container_name: challenge-goexpert-rate-limiter-redis
+    build:
+      context: ./
+    environment:
+      - TOKEN=test_token
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
